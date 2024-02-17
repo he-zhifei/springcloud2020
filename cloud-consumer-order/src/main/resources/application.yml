@@ -1,0 +1,22 @@
+server:
+  port: 80
+spring:
+  application:
+    name: cloud-consumer-order
+  zipkin:
+    # zipkin server地址，zipkin后台：http://localhost:9411/zipkin
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      # 介于0到1之间，1-全部采样
+      probability: 1
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      #defaultZone: http://localhost:7001/eureka
+      defaultZone: http://eureka7001.com:7001/eureka/, http://eureka7002.com:7002/eureka/, http://eureka7003.com:7003/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}

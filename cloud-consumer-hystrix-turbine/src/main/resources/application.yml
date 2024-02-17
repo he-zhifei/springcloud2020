@@ -1,0 +1,30 @@
+server:
+  port: 9500
+spring:
+  application:
+    name: cloud-consumer-hystrix-turbine
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/, http://eureka7002.com:7002/eureka/, http://eureka7003.com:7003/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+
+# 配置单个微服务集群，注意大小写，dashboard面板监控的url是：http://localhost:9500/turbine.stream?cluster=CLOUD-PROVIDER-PAYMENT-EUREKA-HYSTRIX
+#turbine:
+#  app-config: cloud-provider-payment-eureka-hystrix
+#  aggregator:
+#    cluster-config: CLOUD-PROVIDER-PAYMENT-EUREKA-HYSTRIX
+#  instanceUrlSuffix:       # 配合server.context-path=/xxx使用，如果配置了某个模块的context-path，要获取到信息需要配置前缀
+#    CLOUD-PROVIDER-PAYMENT-EUREKA-HYSTRIX: /xxx/hystrix.stream
+
+# 配置多个（也可以像上面配置多个用逗号分隔），dashboard面板监控的url是：http://localhost:9500/turbine.stream，不需要指定集群名称
+turbine:
+  app-config: cloud-provider-payment-eureka-hystrix
+  aggregator:
+    cluster-config: default
+  # 用"'default'"或者new String("default")
+  cluster-name-expression: "'default'"

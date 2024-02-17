@@ -1,0 +1,37 @@
+server:
+  port: 3001
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      label: main
+      server:
+        #可通过（label为分支）:
+        # http://localhost:port/{label}/{application}-{profile}.yml
+        # http://localhost:port/{application}-{profile}.yml
+        # http://localhost:port/{label}/{application}-{profile}.properties
+        # http://localhost:port/{application}-{profile}.properties
+        # http://localhost:port/{application}/{profile}[/{label}]      返回的是json串
+        git:
+          # 这个uri上的{application}值的是config client工程中的spring.application.name，两者结合确定配置的git地址，
+          # 这种方式一个微服务对应一个git配置中心仓库，这里为了方便把多个微服务的配置中心，配置到同一个git仓库。
+          # 而通过config client中配置的{spring.application.name}-{spring.cloud.config.profile}确定配置，
+          # 实际上是通过{spring.cloud.config.name}-{spring.cloud.config.profile}确定配置的，而前者的配置正是
+          # spring.application.name:application，即没配置spring.cloud.config.name时，使用的是spring.application.name，
+          # 若同时也没有配置app name，默认就使用application。因此，这里也可以通过固定写一个仓库，通过config client的app name
+          # 和config profile确定配置文件。
+          #uri: https://github.com/he-zhifei/{application}.git
+          uri: https://github.com/he-zhifei/springcloud-config.git
+#          search-paths:
+#            - config-server
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/, http://eureka7002.com:7002/eureka/, http://eureka7003.com:7003/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
